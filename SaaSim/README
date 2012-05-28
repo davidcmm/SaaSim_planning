@@ -1,0 +1,69 @@
+Welcome to SaaSim!
+
+Table of Contents
+--------------------------
+ 1 - General Info
+ 2 - People
+ 3 - What is SaaSim?
+ 4 - Building
+ 5 - Configuring
+ 6 - Running
+--------------------------
+
+*** 1 - General Info ***
+
+SaaS Intelligent Management
+
+Link to the public page in redmine:
+	
+Link to the code svn:
+	https://saasim-david.googlecode.com/svn/trunk
+	
+*** 2 - People ***
+
+Members:
+	Raquel Vigolvino Lopes, professor. Contact: raquel at dsc.ufcg.edu.br
+	David Candeia Maia, Msc student. Contact: davidcmm at lsd.ufcg.edu.br
+	Ricardo Araújo Santos, Msc student. Contact: ricardo at lsd.ufcg.edu.br
+	Lília Rodrigues Sampaio, developer. Contact: liliars at lsd.ufcg.edu.br
+
+*** 3 - What is SaaSim? ***
+
+SaaSim is a simulator based on Cloud Computing market, where companies provide
+virtual resources on-demand, such as infrastructure, data storage and software services. 
+SaaSim aims to simulate the behavior of a SaaS provider dealing with planning 
+and management capacity of a SaaS application. The simulator has two main parts: i) the simulation of
+a capacity planning process where reservation plans are established between the SaaS provider and a IaaS provider; ii) 
+the simulation of workload requests processing. In this phase a dynamic provisioning system is considered in order to
+calculate the number of machines required to process the workload.
+
+
+*** 4 - Building ***
+
+On a terminal window run:
+
+	mvn package
+
+and a target/saasim-${version}-all.zip file will be created.
+
+*** 5 - Configuring ***
+
+SaaSim need some configuration files to work, 
+	** config.properties : contains the basic informations to SaaSim work, like the 
+planning heuristic, machine type to be used by an Overprovisioning planning heuristic, provisioning heuristic, workload parser, and others. 
+Also, this file include all files necessary to SaaSim: saas.plans, saas.app, users.properties, 
+iaas.providers, model.plan ;
+	** saas.plans : contains values of plans offered by a SaaS provider (currently values are based on Big Commerce). Informations 
+like the plan name(bronze, gold, etc), price, limits of cpu, storage, and others.
+	** saas.app : contains information about the application, like number of tiers, expected response time, etc.
+	** users.properties : contains information about SaaS client(s) submiting requests to a SaaS provider. This file points to a set of *.trc files that represents the whole workload of each SaaS client during the evaluation period (e.g., one year). A *.trc file contain a line for each day to be simulated, and each line points to a file that represents a day of workload.
+	** model.plan : contains information about the reservation plan established (provider name, machine types, amounts reserved).
+	** iaas.providers : contains information about the IaaS providers. 
+
+*** 6 - Running ***
+
+On the terminal window run
+ 
+	runSimulation.sh 
+
+with one configuration file like config.properties and SaaSim will be run. The script will run a capacity planning phase

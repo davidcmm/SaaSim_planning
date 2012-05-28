@@ -1,0 +1,6 @@
+#Reservation plan
+
+
+iaas.plan.name=amazon
+iaas.plan.types=m1_small
+iaas.plan.reservation=58
