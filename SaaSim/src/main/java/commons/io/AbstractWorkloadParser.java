@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import commons.cloud.Request;
+import commons.config.Configuration;
 
 /**
  * General methods used for reading workload
@@ -70,9 +71,25 @@ public abstract class AbstractWorkloadParser implements WorkloadParser<Request>{
 				file = reader.readLine();
 			}
 			reader.close();
+			
+			//Configuring which IaaS provider risk to use
+			configRiskToUse(file);
+			
 			return file == null? "": file;
 		} catch (Exception e) {
 			throw new RuntimeException("Problem reading workload file.", e);
+		}
+	}
+	
+	/**
+	 * This method configures the IaaS provider risk to be used according to the workload file being
+	 * simulated
+	 * @param file The workload file
+	 */
+	private void configRiskToUse(String file) {
+		Configuration config = Configuration.getInstance();
+		if(!config.isRiskConfigured()){
+			config.setRisk(file);
 		}
 	}
 

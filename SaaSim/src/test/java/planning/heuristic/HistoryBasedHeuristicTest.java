@@ -803,7 +803,7 @@ public class HistoryBasedHeuristicTest extends ValidConfigurationTest{
 	}
 	
 	@Test
-	public void testFindPlanWellUsedServersWithMoreThanOneExecution() throws IOException, ClassNotFoundException, ConfigurationException{
+	public void testFindPlanWithWellUsedServersAndMoreThanOneExecution() throws IOException, ClassNotFoundException, ConfigurationException{
 		
 		SimulationInfo simulationInfo = new SimulationInfo(1, 0, 2);
 		SimulationInfo simulationInfo2 = new SimulationInfo(2, 0, 2);

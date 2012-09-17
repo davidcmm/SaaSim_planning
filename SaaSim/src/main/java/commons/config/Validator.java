@@ -165,4 +165,12 @@ public class Validator {
 			checkIsEnumArray(propertyName, value.split(separator), enumClass);
 		}
 	}
+
+	public static void checkIsBoolean(String propertyName, String value) throws ConfigurationException {
+		try{
+			Boolean.parseBoolean(value);
+		}catch(NumberFormatException e){
+			throw new ConfigurationException(propertyName + " must be a non negative integer.", e);
+		}
+	}
 }

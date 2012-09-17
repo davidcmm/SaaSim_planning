@@ -196,9 +196,11 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		
 		Configuration config = EasyMock.createMock(Configuration.class);
 		PowerMock.mockStatic(Configuration.class);
-		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(3);
+		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(5);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(360l);
 		
 		PowerMock.replayAll(config);
@@ -234,9 +236,11 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		
 		Configuration config = EasyMock.createMock(Configuration.class);
 		PowerMock.mockStatic(Configuration.class);
-		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(3);
+		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(5);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(360l);
 		
 		PowerMock.replayAll(config);
@@ -285,9 +289,11 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		
 		Configuration config = EasyMock.createMock(Configuration.class);
 		PowerMock.mockStatic(Configuration.class);
-		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(3);
+		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(5);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(360l);
 		
 		PowerMock.replayAll(config);
@@ -329,9 +335,11 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		
 		Configuration config = EasyMock.createMock(Configuration.class);
 		PowerMock.mockStatic(Configuration.class);
-		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(3);
+		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(5);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(360l);
 		
 		PowerMock.replayAll(config);
@@ -367,9 +375,11 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		
 		Configuration config = EasyMock.createMock(Configuration.class);
 		PowerMock.mockStatic(Configuration.class);
-		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(3);
+		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(5);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(360l);
 		
 		PowerMock.replayAll(config);
@@ -410,9 +420,11 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		
 		Configuration config = EasyMock.createMock(Configuration.class);
 		PowerMock.mockStatic(Configuration.class);
-		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(3);
+		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(5);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(12l);
 		
 		PowerMock.replayAll(config);
@@ -445,9 +457,11 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		
 		Configuration config = EasyMock.createMock(Configuration.class);
 		PowerMock.mockStatic(Configuration.class);
-		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(3);
+		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(5);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(12l);
 		
 		PowerMock.replayAll(config);
@@ -483,9 +497,11 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		
 		Configuration config = EasyMock.createMock(Configuration.class);
 		PowerMock.mockStatic(Configuration.class);
-		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(3);
+		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(5);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(12l);
 		
 		PowerMock.replayAll(config);
@@ -1658,10 +1674,12 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		
 		Configuration config = EasyMock.createMock(Configuration.class);
 		PowerMock.mockStatic(Configuration.class);
-		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(4);
+		EasyMock.expect(Configuration.getInstance()).andReturn(config).times(6);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(360l);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0.0);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SaaSAppProperties.APPLICATION_SLA_MAX_RESPONSE_TIME)).andReturn(DEFAULT_SLA * 1000);
 		
 		//IaaS providers
@@ -1730,7 +1748,9 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
 //		EasyMock.expect(config.getLong(SimulatorProperties.DPS_MONITOR_INTERVAL)).andReturn(500l);
 //		EasyMock.expect(config.getParserPageSize()).andReturn(TickSize.MINUTE);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0.0);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SaaSAppProperties.APPLICATION_SLA_MAX_RESPONSE_TIME)).andReturn(DEFAULT_SLA * 1000);
 		
 		//IaaS providers
@@ -1799,7 +1819,9 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		EasyMock.expect(Configuration.getInstance()).andReturn(config).anyTimes();
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(360l);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0.0);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SaaSAppProperties.APPLICATION_SLA_MAX_RESPONSE_TIME)).andReturn(DEFAULT_SLA * 1000);
 		
 		//IaaS providers
@@ -1865,7 +1887,9 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		EasyMock.expect(Configuration.getInstance()).andReturn(config).anyTimes();
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(360l);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0.0);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SaaSAppProperties.APPLICATION_SLA_MAX_RESPONSE_TIME)).andReturn(DEFAULT_SLA * 1000);
 		
 		//IaaS providers
@@ -1931,7 +1955,9 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		EasyMock.expect(Configuration.getInstance()).andReturn(config).anyTimes();
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_PERIOD)).andReturn(360l);
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0.0);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SaaSAppProperties.APPLICATION_SLA_MAX_RESPONSE_TIME)).andReturn(DEFAULT_SLA * 1000);
 		
 		//IaaS providers
@@ -2005,7 +2031,9 @@ public class PlanningFitnessFunctionTest extends MockedConfigurationTest {
 		EasyMock.expect(config.getLong(SimulatorProperties.PLANNING_INTERVAL_SIZE)).andReturn(60l * 60l);
 //		EasyMock.expect(config.getLong(SimulatorProperties.DPS_MONITOR_INTERVAL)).andReturn(500l);
 //		EasyMock.expect(config.getParserPageSize()).andReturn(TickSize.MINUTE);
-		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_RISK)).andReturn(0.0);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_NORMAL_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_TRANS_RISK)).andReturn(0d);
+		EasyMock.expect(config.getDouble(SimulatorProperties.PLANNING_PEAK_RISK)).andReturn(0d);
 		EasyMock.expect(config.getLong(SaaSAppProperties.APPLICATION_SLA_MAX_RESPONSE_TIME)).andReturn(DEFAULT_SLA * 1000);
 		
 		//IaaS providers

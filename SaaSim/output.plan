@@ -1,0 +1,3 @@
+iaas.plan.name=p1
+iaas.plan.types=m1_small
+iaas.plan.reservation=2

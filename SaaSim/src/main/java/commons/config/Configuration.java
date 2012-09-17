@@ -48,6 +48,7 @@ public class Configuration extends ComplexPropertiesConfiguration{
 	private static boolean USE_ERROR = false;
 	
 	private int[] priorities;
+	private Double risk;
 	
 	/**
 	 * Private constructor.
@@ -58,6 +59,7 @@ public class Configuration extends ComplexPropertiesConfiguration{
 	private Configuration(String propertiesFileName) throws ConfigurationException {
 		super(propertiesFileName);
 		verifyProperties();
+		this.risk = null;
 	}
 
 	/**
@@ -118,6 +120,38 @@ public class Configuration extends ComplexPropertiesConfiguration{
 	 */
 	public ParserIdiom getParserIdiom(){
 		return parseEnum(getString(PARSER_IDIOM), ParserIdiom.class);
+	}
+	
+	/**
+	 * Retrieves if the simulator is operating in debug mode
+	 * @return 
+	 */
+	public boolean isDebugMode(){
+		return getBoolean(DEBUG_MODE);
+	}
+	
+	/**
+	 * Retrieves the machines consumption percentile to be used by {@link OptimalProvisioningSystemForHeterogeneousMachines}
+	 * @return
+	 */
+	public double getOptimalDPSPercentile() {
+		return getDouble(DPS_OPTIMAL_PERCENTILE);
+	}
+	
+	/**
+	 * This method checks if the IaaS on-demand market risk probability distribution was already configured
+	 * @return
+	 */
+	public boolean isRiskConfigured() {
+		return this.risk != null;
+	}
+	
+	/**
+	 * This method returns the IaaS on-demand market risk probability distribution
+	 * @return
+	 */
+	public double getIaaSOnDemandRisk() {
+		return this.risk;
 	}
 	
 	/**
@@ -288,6 +322,22 @@ public class Configuration extends ComplexPropertiesConfiguration{
 	}
 	
 	/**
+	 * This method configures the multi-modal IaaS on-demand market risk probability distribution to be used in current simulation
+	 * @param file The workload file to be simulated
+	 */
+	public void setRisk(String file) {
+		if(file.contains(WORKLOAD_NORM_TAG)){
+			this.risk = getDouble(PLANNING_NORMAL_RISK);
+			
+		}else if(file.contains(WORKLOAD_TRANSITION_TAG)){
+			this.risk = getDouble(PLANNING_TRANS_RISK);
+
+		}else if(file.contains(WORKLOAD_PEAK_TAG)){
+			this.risk = getDouble(PLANNING_PEAK_RISK);
+		}
+	}
+	
+	/**
 	 * Checks if simulation properties were correctly defined
 	 */
 	private void verifyProperties() throws ConfigurationException{
@@ -304,9 +354,17 @@ public class Configuration extends ComplexPropertiesConfiguration{
 	private void verifySimulatorProperties() throws ConfigurationException {
 		checkDPSHeuristic();
 		
-		String value = getString(PLANNING_RISK);
+		String value = getString(PLANNING_NORMAL_RISK);
 		if(value != null && value.length() > 0){
-			Validator.checkNonNegativeDouble(PLANNING_RISK, value);
+			Validator.checkNonNegativeDouble(PLANNING_NORMAL_RISK, value);
+		}
+		value = getString(PLANNING_TRANS_RISK);
+		if(value != null && value.length() > 0){
+			Validator.checkNonNegativeDouble(PLANNING_TRANS_RISK, value);
+		}
+		value = getString(PLANNING_PEAK_RISK);
+		if(value != null && value.length() > 0){
+			Validator.checkNonNegativeDouble(PLANNING_PEAK_RISK, value);
 		}
 		value = getString(PLANNING_ERROR);
 		if(value != null && value.length() > 0){
@@ -316,7 +374,20 @@ public class Configuration extends ComplexPropertiesConfiguration{
 		if(value != null && value.length() > 0){
 			Validator.checkPositive(PLANNING_INTERVAL_SIZE, value);
 		}
+		value = getString(DEBUG_MODE);
+		if(value != null && value.length() > 0){
+			Validator.checkIsBoolean(DEBUG_MODE, value);
+		}else{
+			setProperty(DEBUG_MODE, false);
+		}
 		
+		value = getString(DPS_OPTIMAL_PERCENTILE);
+		if(value != null && value.length() > 0){
+			Validator.checkPositiveDouble(DPS_OPTIMAL_PERCENTILE, getString(DPS_OPTIMAL_PERCENTILE));
+		}else{
+			setProperty(DPS_OPTIMAL_PERCENTILE, 0.95);
+		}
+
 		Validator.checkPositive(PLANNING_PERIOD, getString(PLANNING_PERIOD));
 		Validator.checkEnum(PARSER_IDIOM, getString(PARSER_IDIOM), ParserIdiom.class);
 		Validator.checkEnum(PARSER_PAGE_SIZE, getString(PARSER_PAGE_SIZE), TimeUnit.class);
@@ -516,7 +587,7 @@ public class Configuration extends ComplexPropertiesConfiguration{
 		}
 		
 	}
-
+	
 	public String[] getWorkloads() {
 		String[] workloads = getStringArray(SAAS_USER_WORKLOAD);
 		

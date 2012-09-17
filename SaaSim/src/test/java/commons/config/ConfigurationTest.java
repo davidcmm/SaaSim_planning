@@ -87,6 +87,42 @@ public class ConfigurationTest {
 	public void testBuildInstanceWithValidConfiguration() throws ConfigurationException {
 		Configuration.buildInstance(PropertiesTesting.VALID_SINGLE_WORKLOAD_FILE);
 		assertNotNull(Configuration.getInstance());
+		
+		assertTrue(Configuration.getInstance().isDebugMode());
+		try{
+			Configuration.getInstance().getIaaSOnDemandRisk();
+			fail("IaaS on-demand risk was not set since workload was not read!");
+		}catch(NullPointerException e){
+		}
+		assertEquals(0.72, Configuration.getInstance().getOptimalDPSPercentile(), 0.0);
+	}
+	
+	@Test
+	public void testBuildInstanceWithValidConfigurationWithoutDebugMode() throws ConfigurationException {
+		Configuration.buildInstance(PropertiesTesting.VALID_SINGLE_WORKLOAD_FILE_1);
+		assertNotNull(Configuration.getInstance());
+		
+		assertFalse(Configuration.getInstance().isDebugMode());
+		try{
+			Configuration.getInstance().getIaaSOnDemandRisk();
+			fail("IaaS on-demand risk was not set since workload was not read!");
+		}catch(NullPointerException e){
+		}
+		assertEquals(0.72, Configuration.getInstance().getOptimalDPSPercentile(), 0.0);
+	}
+	
+	@Test
+	public void testBuildInstanceWithValidConfigurationWithoutDPSPercentile() throws ConfigurationException {
+		Configuration.buildInstance(PropertiesTesting.VALID_SINGLE_WORKLOAD_FILE_2);
+		assertNotNull(Configuration.getInstance());
+		
+		assertFalse(Configuration.getInstance().isDebugMode());
+		try{
+			Configuration.getInstance().getIaaSOnDemandRisk();
+			fail("IaaS on-demand risk was not set since workload was not read!");
+		}catch(NullPointerException e){
+		}
+		assertEquals(0.95, Configuration.getInstance().getOptimalDPSPercentile(), 0.0);
 	}
 	
 	@Test

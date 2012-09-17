@@ -16,7 +16,7 @@ import commons.io.GEISTWorkloadParser;
 import commons.io.WorkloadParser;
 import commons.sim.provisioningheuristics.MachineStatistics;
 import commons.sim.util.SaaSAppProperties;
-import commons.sim.util.SimulatorProperties;
+import edu.uah.math.distributions.BinomialDistribution;
 
 /**
  * This class represents the DPS business logic modified from original RANJAN. Here some statistics of current
@@ -30,11 +30,11 @@ import commons.sim.util.SimulatorProperties;
  */
 public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicProvisioningSystem {
 
-	private static final int QUANTUM_SIZE = 100;
+	private static final int QUANTUM_SIZE_IN_MILLIS = 100;
 
 	protected MachineType[] acceleratorTypes = {MachineType.M1_SMALL};
 	
-	private int tick;
+	private int oneHourTick;
 	private long currentTick;
 	private Request[] leftOver;
 	private WorkloadParser[] parsers;
@@ -46,6 +46,9 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 	private int numberOfRequests;
 	public LinkedList<Integer> machinesPerHour;
 	
+	//Debug
+//	private FileWriter writer; 
+	
 	/**
 	 * Default constructor.
 	 */
@@ -53,13 +56,19 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 		super();
 		
 		String[] workloadFiles = Configuration.getInstance().getWorkloads();
-		this.tick = 1000 * 60 * 60;
-		this.currentTick = Checkpointer.loadSimulationInfo().getCurrentDayInMillis() + tick;
+		this.oneHourTick = 1000 * 60 * 60;
+		this.currentTick = Checkpointer.loadSimulationInfo().getCurrentDayInMillis() + oneHourTick;
 		this.leftOver = new Request[workloadFiles.length];
 
 		this.SLA = Configuration.getInstance().getLong(SaaSAppProperties.APPLICATION_SLA_MAX_RESPONSE_TIME);
 		this.nextRequestsCounter = new double[36000];
 		this.machinesPerHour =  new LinkedList<Integer>();
+		
+//		try {
+//			this.writer = new FileWriter(new File("machineConsumption.dat"), true);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	@Override
@@ -88,11 +97,11 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 		this.totalMeanToProcess = 0;
 		this.numberOfRequests = 0;
 		
-		for (int i = 0; i < leftOver.length; i++) {
+		for (int i = 0; i < leftOver.length; i++) {//Requests left from previous workload reading
 			Request left = leftOver[i];
 			if(left != null){
 				if(left.getArrivalTimeInMillis() < currentTick){
-					countData(left, currentTick - tick);
+					countData(left, currentTick - oneHourTick);
 					leftOver[i] = null;
 				}
 			}
@@ -104,7 +113,7 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 				while(parser.hasNext()){
 					Request next = parser.next();
 					if(next.getArrivalTimeInMillis() < currentTick){
-						countData(next, currentTick - tick);
+						countData(next, currentTick - oneHourTick);
 					}else{
 						leftOver[i] = next;
 						break;
@@ -113,7 +122,7 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 			}
 		}
 		
-		this.currentTick += tick;
+		this.currentTick += oneHourTick;
 		
 		//Calculating number of machines!
 		evaluateNumberOfServersToAdd(tier, statistics.totalNumberOfServers, now);
@@ -127,10 +136,10 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 	private void countData(Request request, long currentTime) {
 		this.numberOfRequests++;
 		
-		int index = (int) ((request.getArrivalTimeInMillis() - currentTime) / QUANTUM_SIZE);
+		int index = (int) ((request.getArrivalTimeInMillis() - currentTime) / QUANTUM_SIZE_IN_MILLIS);
 		this.currentRequestsCounter[index]++;//Adding demand in arrival interval
 		
-		long intervalsToProcess = request.getMaximumToProcess() / QUANTUM_SIZE;
+		long intervalsToProcess = request.getMaximumToProcess() / QUANTUM_SIZE_IN_MILLIS;
 		
 		for(int i = index+1; i < index + intervalsToProcess; i++){//Adding demand to subsequent intervals
 			if(i >= this.currentRequestsCounter.length){
@@ -149,11 +158,23 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 	 */
 	private void evaluateNumberOfServersToAdd(int tier, long totalNumberOfServers, long now) {
 		
-		Percentile percentile = new Percentile(100);
+		Percentile percentile = new Percentile(Configuration.getInstance().getOptimalDPSPercentile());
 		double maximumDemand = percentile.evaluate(currentRequestsCounter);
+
+		//FIXME: Remove this >>> Testing
+//		System.err.print(">>>>Counter\t");
+//		for(double machine : currentRequestsCounter){
+//			System.err.print(machine+"\t");
+//		}
+//		System.err.println();
+		//>>> Testing
 		
 		int numberOfServers = (int)Math.ceil(maximumDemand);
 		this.machinesPerHour.add(numberOfServers);
+		
+		if(Configuration.getInstance().isDebugMode()){
+			System.err.println("REQ:\t"+numberOfServers);
+		}
 		
 		long numberOfServersToAdd = numberOfServers - totalNumberOfServers;
 		if(numberOfServersToAdd > 0){//Adding servers
@@ -161,6 +182,17 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 		}else if(numberOfServersToAdd < 0){//Removing servers
 			for (int i = 0; i < -numberOfServersToAdd; i++) {
 				configurable.removeServer(tier, false);
+			}
+		}
+		
+		//Debug resource consumption information
+		if(Configuration.getInstance().isDebugMode()){
+			for (Provider provider : providers) {
+				int amountOfReservedResources = provider.getAmountOfReservedResources();
+				int amountOfOnDemandResources = provider.getAmountOfOnDemandResources();
+				int total = amountOfReservedResources + amountOfOnDemandResources;
+	
+				System.err.println("ACC:\t"+amountOfReservedResources+"\t"+amountOfOnDemandResources+"\t"+total);
 			}
 		}
 		
@@ -198,8 +230,8 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 			//Applying on-demand market risk ...
 			numberOfServersToAdd = (numberOfServersToAdd - serversAdded);
 			serversAdded = 0;
-			double onDemandRisk = Configuration.getInstance().getDouble(SimulatorProperties.PLANNING_RISK);
-			numberOfServersToAdd = (int) Math.ceil(numberOfServersToAdd * (1-onDemandRisk));
+
+			numberOfServersToAdd = calculateNumberOfServersFromOnDemand(numberOfServersToAdd);
 			
 			for(MachineType machineType : this.acceleratorTypes){
 				for (Provider provider : providers) {
@@ -219,6 +251,20 @@ public class OptimalProvisioningSystemForHeterogeneousMachines extends DynamicPr
 		}
 	}
 	
+	/**
+	 * This method calculates the number of resources that are successfully acquired from the IaaS on-demand market
+	 * considering that there is a DoS risk
+	 * @param numberOfServersToAdd The amount of resources required by the Optimal DPS system
+	 * @return The number of resources that were successfully acquired from the IaaS on-demand market
+	 */
+	private long calculateNumberOfServersFromOnDemand(long numberOfServersToAdd) {
+		int trials = (int) numberOfServersToAdd;
+		double p = 1.0 - Configuration.getInstance().getIaaSOnDemandRisk();
+		BinomialDistribution dist = new BinomialDistribution(trials, p);
+		
+		return (long)dist.simulate();
+	}
+
 	@Override
 	public void requestQueued(long timeMilliSeconds, Request request, int tier) {
 		reportLostRequest(request);

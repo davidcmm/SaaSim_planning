@@ -122,6 +122,8 @@ public class PlanningFitnessFunction extends FitnessFunction{
 			Map<MachineType, Double> throughputPerMachineType = new HashMap<MachineType, Double>();
 			double reservedThroughput = 0d;
 			double missingThroughput = 0d;
+			//TODO: Used to round queues: double totalFinished = 0d;
+			
 			for(MachineType type : arrivalRatesPerMachineType.keySet()){
 				
 				Double currentArrivalRate = arrivalRatesPerMachineType.get(type);
@@ -138,23 +140,25 @@ public class PlanningFitnessFunction extends FitnessFunction{
 					missingThroughput += (currentArrivalRate - maximumThroughput);
 					reservedThroughput += maximumThroughput;
 					
-					Double totalFinished = totalRequestsFinished.get(type);
-					if(totalFinished == null){
-						totalFinished = 0d;
+					Double currentFinished = totalRequestsFinished.get(type);
+					if(currentFinished == null){
+						currentFinished = 0d;
 					}
-					totalFinished += maximumThroughput * SUMMARY_LENGTH_IN_SECONDS;
-					totalRequestsFinished.put(type, totalFinished);
+					currentFinished += maximumThroughput * SUMMARY_LENGTH_IN_SECONDS;
+					totalRequestsFinished.put(type, currentFinished);
+					//totalFinished += currentFinished;
 					
 				}else{//All requests can be processed in reserved resources!
 					throughputPerMachineType.put(type, currentArrivalRate);
 					reservedThroughput += currentArrivalRate;
 					
-					Double totalFinished = totalRequestsFinished.get(type);
-					if(totalFinished == null){
-						totalFinished = 0d;
+					Double currentFinished = totalRequestsFinished.get(type);
+					if(currentFinished == null){
+						currentFinished = 0d;
 					}
-					totalFinished += currentArrivalRate * SUMMARY_LENGTH_IN_SECONDS;
-					totalRequestsFinished.put(type, totalFinished);
+					currentFinished += currentArrivalRate * SUMMARY_LENGTH_IN_SECONDS;
+					totalRequestsFinished.put(type, currentFinished);
+					//totalFinished += currentFinished;
 					
 				}
 			}
@@ -166,15 +170,19 @@ public class PlanningFitnessFunction extends FitnessFunction{
 			//Calculating missing requests. This value is amortized by reserved queue size!
 			double requestsMissed = missingThroughput * SUMMARY_LENGTH_IN_SECONDS;
 			if(ratesDifference == 0 && reservedThroughput != 0){//Queue starts at this interval, so some requests are not really missed!
-				requestsMissed -= (maxResponseTimeInMillis / meanServiceTimeInMillis) * totalCores * OPTIMAL_UTILIZATION;
-				requestsRemovedFromQueue += (maxResponseTimeInMillis / meanServiceTimeInMillis) * totalCores * OPTIMAL_UTILIZATION;
+				//FIXME: Used to round queues:
+//				double queuedRequests = Math.max(( (maxResponseTimeInMillis / meanServiceTimeInMillis) * (HOUR_IN_MILLIS/maxResponseTimeInMillis) * totalCores - totalFinished) * OPTIMAL_UTILIZATION, 0); 
+//				requestsMissed = Math.max(requestsMissed - queuedRequests, 0);
+//				requestsRemovedFromQueue += Math.min(requestsMissed, queuedRequests);
 				
+				requestsMissed -= Math.max(requestsMissed -(maxResponseTimeInMillis / meanServiceTimeInMillis) * totalCores * OPTIMAL_UTILIZATION, 0);
+				requestsRemovedFromQueue += (maxResponseTimeInMillis / meanServiceTimeInMillis) * totalCores * OPTIMAL_UTILIZATION;
 			}
 			
 			//Evaluating on-demand resources consumption because of requests that could not be processed in reserved resources
 			if(requestsMissed > 0){
-				int onDemandQueueSize = (int) Math.ceil( ((maxResponseTimeInMillis / meanServiceTimeInMillis) * OPTIMAL_UTILIZATION) );
-				int numberOfOnDemandMachines = (int) Math.ceil(requestsMissed / (onDemandQueueSize*HOUR_IN_MILLIS/maxResponseTimeInMillis));
+				int onDemandQueueSize = (int) Math.max(Math.ceil( ((maxResponseTimeInMillis / meanServiceTimeInMillis) * OPTIMAL_UTILIZATION) ), 0);
+				int numberOfOnDemandMachines = (int) Math.ceil(requestsMissed / (onDemandQueueSize * HOUR_IN_MILLIS/maxResponseTimeInMillis));
 				totalOnDemandConsumedHrs += numberOfOnDemandMachines;
 			}
 			
@@ -302,7 +310,10 @@ public class PlanningFitnessFunction extends FitnessFunction{
 			Map<MachineType, Integer> currentPowerPerMachineType, double requestsLostDueToResponseTime, double requestsLostDueToThroughput, double requestsRemovedFromQueue) {
 		
 		//Verifying on-demand resources that can be used
-		double onDemandRisk = Configuration.getInstance().getDouble(SimulatorProperties.PLANNING_RISK);
+//		double onDemandRisk = Configuration.getInstance().getDouble(SimulatorProperties.PLANNING_RISK);
+		double onDemandRisk = (Configuration.getInstance().getDouble(SimulatorProperties.PLANNING_NORMAL_RISK) + 
+				Configuration.getInstance().getDouble(SimulatorProperties.PLANNING_TRANS_RISK) + 
+				Configuration.getInstance().getDouble(SimulatorProperties.PLANNING_PEAK_RISK) ) / 3.0;
 		long onDemandResources = Math.round(cloudProviders[0].getOnDemandLimit());
 		
 		Provider provider = cloudProviders[0];

@@ -13,13 +13,17 @@ public class PropertiesTesting {
 	public static final String WORKLOAD_WITH_MISSING_TRACE = "src/test/resources/workload/workload_with_missing_trace.trc";
 	public static final String WORKLOAD = "src/test/resources/workload/workload.trc";
 	public static final String WORKLOAD_WITH_EMPTY_TRACE = "src/test/resources/workload/workload_with_empty_trace.trc";
-	public static final String ONE_SERVER_WORKLOAD = "src/test/resources/workload/oneServerWorkloadPointer.trc";
-	public static final String FOUR_SERVERS_WORKLOAD = "src/test/resources/workload/fourServersWorkloadPointer.trc";
+	public static final String ONE_SERVER_WORKLOAD_POINTER = "src/test/resources/workload/oneServerWorkloadPointer.trc";
+	public static final String ONE_SERVER_WORKLOAD = "src/test/resources/workload/norm/oneServerWorkload.trc";
+	public static final String FOUR_SERVERS_WORKLOAD_POINTER = "src/test/resources/workload/fourServersWorkloadPointer.trc";
+	public static final String FOUR_SERVERS_WORKLOAD = "src/test/resources/workload/norm/fourServersWorkload.trc";
 	public static final String TRACE_WITH_BLANK_LINE = "src/test/resources/workload/workload_trace_with_blank.trc";
 	public static final String TRACE_WITH_BLANK_END_LINE = "src/test/resources/workload/workload_trace_with_end_blank.trc";
 	
 	
 	public static final String VALID_SINGLE_WORKLOAD_FILE = "src/test/resources/config-single-workload-file.properties";
+	public static final String VALID_SINGLE_WORKLOAD_FILE_1 = "src/test/resources/config-single-workload-file-1.properties";
+	public static final String VALID_SINGLE_WORKLOAD_FILE_2 = "src/test/resources/config-single-workload-file-2.properties";
 	public static final String VALID_MULTI_WORKLOAD_FILE = "src/test/resources/config-multi-workload-file.properties";
 	public static final String VALID_DIFFERENT_USERS_FILE = "src/test/resources/config-different-users-file.properties";
 	public static final String VALID_TWO_USERS_FILE = "src/test/resources/config-two-workload-disordered.properties";

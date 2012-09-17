@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import commons.sim.components.Machine;
@@ -282,6 +283,22 @@ public class Provider implements Serializable{
 			return true;
 		Provider other = (Provider) obj;
 		return (id == other.id);
+	}
+
+	public int getAmountOfReservedResources() {
+		int total = 0;
+		for(Entry<MachineType, TypeProvider> entry : types.entrySet()){
+			total += entry.getValue().getReservedRunningMachines().size();
+		}
+		return total;
+	}
+
+	public int getAmountOfOnDemandResources() {
+		int total = 0;
+		for(Entry<MachineType, TypeProvider> entry : types.entrySet()){
+			total += entry.getValue().getOnDemandRunningMachines().size();
+		}
+		return total;
 	}
 	
 }
